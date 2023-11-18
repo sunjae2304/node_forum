@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <%-include('navbar.ejs') %>
+    <ul class="list-group">
+        <% for (let i = 0 ; i<dbResult.length ; i++ ) { %>
+            <li class="list-group-item">
+                <a href="/view?id=<%=dbResult[i].dataValues.id%>"><%=dbResult[i].dataValues.title%></a> 
+                <a href="/edit?id=<%=dbResult[i].dataValues.id%>">✍️</a>
+                <button class="del" style="border: 0px;" data-id="<%=dbResult[i].dataValues.id%>">🗑️</button>
+            </li>
+        <%}%>
+    </ul>
+    <script>
+        btns = document.getElementsByClassName('del')
+            for (let i = 0;i<btns.length;i++){
+                btns[i].addEventListener('click',function(e){
+                fetch("/delete/?id=" + e.target.dataset.id,
+                {
+                    method: "DELETE"
+                }).then().then(btns[i].parentElement.style.display = 'none')
+        })}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
