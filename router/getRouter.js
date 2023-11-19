@@ -1,8 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const models = require('../models');
+const jwt = require('jsonwebtoken');
+const jwtSecret = process.env.JWT_SECRET;
+
 
 router.get('/', (req, res) => {
+    const { token } = req.cookies;
+    const verified = jwt.verify(token, jwtSecret);
+    console.log(verified.id, verified.username);
     res.redirect('/list');
 })
 
