@@ -1,5 +1,6 @@
 const express = require('express');
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
+const express = require('bcrypt');
 const models = require('./models');
 const app = express();
 require('dotenv').config();
@@ -9,7 +10,7 @@ const PORT = process.env.PORT;
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extends: true}));
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
 
 
 const getRouter = require("./router/getRouter");
