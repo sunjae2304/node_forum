@@ -1,15 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const models = require('../models');
+
+const {PrismaClient} = require('@prisma/client')
+const prisma = new PrismaClient()
 
 router.put('/update', async(req, res) => {
-    await models.post.update({
-      title:req.body.title,
+    await prisma.posts.update({
+      where: {
+        id : parseInt(req.query.id)
+      },
+      data: {
+        title:req.body.title,
       content:req.body.content
-    },
-    {
-      where : { id : req.query.id}
-    });
+      },
+    })
     res.redirect('/list')
 })
 

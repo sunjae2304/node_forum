@@ -1,42 +1,48 @@
 const express = require("express");
 const router = express.Router();
-const models = require('../models');
-const jwt = require('jsonwebtoken');
-const jwtSecret = process.env.JWT_SECRET;
 
+const {PrismaClient} = require('@prisma/client');
+const prisma = new PrismaClient();
 
-router.get('/', (req, res) => {
-    const { token } = req.cookies;
-    const verified = jwt.verify(token, jwtSecret);
-    console.log(verified.id, verified.username);
+router.get('/', async (req, res) => {
     res.redirect('/list');
 })
 
 router.get('/list', async (req, res) => {
-    result = await models.post.findAll();
-    res.render('list.ejs',{dbResult : result});
+    result = await prisma.posts.findMany()
+    res.render('list.ejs', {dbResult : result, user : req.user ? req.user : null});
 })
 
 router.get('/view', async (req, res) => {
-    result = await models.post.findAll({where : {id : req.query.id}});
-    res.render('view.ejs',{dbResult : result});
+    result = await prisma.posts.findUnique({where : {id : parseInt(req.query.id)}});
+    console.log(result)
+    res.render('view.ejs', {dbResult : result, user : req.user ? req.user : null});
 })
 
 router.get('/write', (req, res) => {
-  res.render('write.ejs');
+    if (req.user){
+      res.render('write.ejs', {user : req.user ? req.user : null});
+    }else{
+      res.send("<script>alert('plz signin');location.href='/list';</script>");
+    }
 })
 
 router.get('/edit', async(req, res) => {
-  result = await models.post.findAll({where : {id : req.query.id}});
-  res.render('edit.ejs', {dbResult : result});
+  result = await prisma.posts.findUnique({where : {id : parseInt(req.query.id)}});
+  res.render('edit.ejs', {dbResult : result, user : req.user ? req.user : null});
 })
 
 router.get('/signup', (req, res) => {
-  res.render('signup.ejs')
+  res.render('signup.ejs', {user : req.user ? req.user : null});
 })
 
 router.get('/signin', (req, res) => {
-  res.render('signin.ejs')
+  res.render('signin.ejs', {user : req.user ? req.user : null});
+})
+
+router.get('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.redirect('list')
 })
 
 module.exports = router;

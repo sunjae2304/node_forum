@@ -12,13 +12,24 @@
           <li class="nav-item">
             <a class="nav-link" href="/write">Write ✏️</a>
           </li>
+          <% if (!user){ %>
           <li class="nav-item">
             <a class="nav-link" href="/signup">Sign up</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/signin">Sign in</a>
           </li>
+            <% } %>
+          <% if (user){ %>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Log out</a>
+          </li>
+          <% } %>
+
           <form action="#" style="margin-top: 5px;"><input type="text" placeholder="SEARCH"><button type="submit">🔎</button></form>
+          <li class="nav-item">
+            <p class="nav-link"><%= user ? user.username : ''%></p>
+          </li>
         </ul>
       </div>
     </div>

@@ -1,10 +1,14 @@
 const express = require('express');
 const methodOverride = require('method-override');
-const models = require('./models');
 var cookies = require("cookie-parser");
 const app = express();
 require('dotenv').config();
 const PORT = process.env.PORT;
+const { cookieJwtAuth } = require("./token");
+
+const {PrismaClient} = require('@prisma/client')
+const prisma = new PrismaClient()
+
 
 
 app.set('view engine', 'ejs');
@@ -12,6 +16,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extends: true}));
 app.use(methodOverride('_method'));
 app.use(cookies());
+app.use((req, res, next) => cookieJwtAuth(req, res, next))
+
+
 
 
 const getRouter = require("./router/getRouter");
@@ -27,15 +34,4 @@ app.use("/", putRouter);
 app.use("/", deleteRouter);
 
 
-app.listen(PORT, () => {
-    models.sequelize
-      .sync()
-      .then(() => {
-        console.log(`http://localhost:${PORT}`);
-      })
-      .catch((err) => {
-        console.error(err);
-        console.log("DB 연결 에러");
-        process.exit();
-      });
-  });
+app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
