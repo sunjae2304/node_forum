@@ -9,13 +9,19 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/list', async (req, res) => {
-    result = await prisma.posts.findMany()
+    result = await prisma.posts.findMany();
     res.render('list.ejs', {dbResult : result, user : req.user ? req.user : null});
 })
 
 router.get('/view', async (req, res) => {
-    result = await prisma.posts.findUnique({where : {id : parseInt(req.query.id)}});
-    console.log(result)
+    result = await prisma.posts.findUnique({
+      where: {
+        id: parseInt(req.query.id),
+      },
+      include: {
+        comments: true,
+      },
+    });
     res.render('view.ejs', {dbResult : result, user : req.user ? req.user : null});
 })
 

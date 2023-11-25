@@ -13,7 +13,6 @@ const makeHash = async (password) => {
 
 router.post('/up', async(req, res) => {
     let result = await prisma.users.findUnique({where : {username : req.body.username}});
-    console.log(result)
     if (result){
       res.send('username 중복')
     }else{
@@ -24,7 +23,7 @@ router.post('/up', async(req, res) => {
 
 router.post('/add', async (req, res) => {
     if (req.body.title && req.body.content){
-      await prisma.posts.create({ data : {title : req.body.title, content : req.body.content, authorId : req.user.id}});
+      await prisma.posts.create({ data : {title : req.body.title, content : req.body.content, authorId : req.user.id, like : 0, dislike : 0}});
       res.redirect('/list')
     }
     else{
@@ -51,6 +50,13 @@ router.post('/in', async(req,res)=>{
       }
   }
 });
+
+router.post('/comment', async (req, res) => {
+    const {content} = req.body;
+    await prisma.comments.create({
+      data : { content : content, authorId : req.user.id, PostId : parseInt(req.query.id), authorName : req.user.username }});
+    res.redirect('/view?id='+parseInt(req.query.id))
+})
 
 
 module.exports = router;

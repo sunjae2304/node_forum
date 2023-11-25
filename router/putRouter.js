@@ -17,4 +17,30 @@ router.put('/update', async(req, res) => {
     res.redirect('/list')
 })
 
+router.put('/like', async(req, res) => {
+  const {id} = req.query
+  await prisma.posts.update({
+    where: {
+      id : parseInt(id),
+    },
+    data: {
+      like: {increment: 1},
+    },
+  });
+  res.status(200).json('put ok');
+});
+
+router.put('/dislike', async(req, res) => {
+  const {id} = req.query
+  await prisma.posts.update({
+    where: {
+      id : parseInt(id),
+    },
+    data: {
+      dislike: {increment: 1},
+    },
+  });
+  res.status(200).json('put ok');
+});
+
 module.exports = router;
