@@ -6,26 +6,19 @@ require('dotenv').config();
 const PORT = process.env.PORT;
 const { cookieJwtAuth } = require("./token");
 
-const {PrismaClient} = require('@prisma/client')
-const prisma = new PrismaClient()
-
-
 
 app.set('view engine', 'ejs');
 app.use(express.json());
-app.use(express.urlencoded({ extends: true}));
+app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'));
 app.use(cookies());
 app.use((req, res, next) => cookieJwtAuth(req, res, next))
-
-
 
 
 const getRouter = require("./router/getRouter");
 const postRouter = require("./router/postRouter");
 const putRouter = require("./router/putRouter");
 const deleteRouter = require("./router/deleteRouter");
-
 
 
 app.use("/", getRouter);

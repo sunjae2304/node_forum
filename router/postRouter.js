@@ -4,16 +4,17 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
 const jwtSecret = process.env.JWT_SECRET;
 
-const {PrismaClient} = require('@prisma/client');
-const prisma = new PrismaClient();
+
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
 
 const makeHash = async (password) => {
   return await bcrypt.hash(password, 10);
 }
 
 router.post('/up', async(req, res) => {
-    let result = await prisma.users.findUnique({where : {username : req.body.username}});
-    if (result){
+  let result = await prisma.users.findUnique({where : {username : req.body.username}});
+  if (result){
       res.send('username 중복')
     }else{
       await prisma.users.create({data : {username : req.body.username , password : await makeHash(req.body.password)}});

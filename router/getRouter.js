@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
 router.get('/list', async (req, res) => {
     result = await prisma.posts.findMany();
-    res.render('list.ejs', {dbResult : result, user : req.user ? req.user : null});
+    res.render('list.ejs', {dbResult : result.reverse(), user : req.user ? req.user : null});
 })
 
 router.get('/view', async (req, res) => {
