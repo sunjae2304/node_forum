@@ -15,7 +15,7 @@
     <button class="dislike">👎 <span class="dislikeint"><%=dbResult.dislike%></span></button>
     <br><br>
     <% for (let i = 0; i<dbResult.comments.length; i++){%>
-        <p><%= dbResult.comments[i].authorName %> : <%= dbResult.comments[i].content %></p>
+        <p><img src="<%= dbResult.comments[i].pfp %> " height="32" width="32" style="border-radius: 12px;" alt=""> <%= dbResult.comments[i].authorName %> : <%= dbResult.comments[i].content %></p>
     <%}%>
     <% if (user){ %>
         <form action="/comment?id=<%=dbResult.id%>" method="post">

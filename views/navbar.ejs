@@ -26,7 +26,7 @@
           </li>
           <% } %>
           <li class="nav-item">
-            <p class="nav-link"><%= user ? user.username : ''%></p>
+            <p class="nav-link"><img src="<%= user ? user.pfp : 'https://i.namu.wiki/i/iXOxDDH53OaqoZwaM3UB9SHKSxXFNRLlewTAp9ATqSWWZZHdyWdmA5dlcntWsOo1c_dDLunj8_Y8CWx2nuUGm4HmhrPP0N7ZvPuvYWNCubI8ny20nvS1mK1WurU_pFWmokyRH8IaT0ch5ZA89aGdIg.webp'%>" height="32" width="32" alt="" style="border-radius: 12px;"> <%= user ? user.username : 'guest'%></p>
           </li>
         </ul>
       </div>
